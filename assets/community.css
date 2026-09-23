@@ -13,3 +13,30 @@
 .gx-banner-controls:focus-within{position:relative!important;width:auto!important;height:auto!important;margin:0!important;padding:8px 90px 8px 16px!important;clip-path:none}
 .gx-banner-assurance{margin:14px auto 0;width:calc(100% - 32px);max-width:1600px;border-radius:10px}
 @media(max-width:560px){.gx-banner-slide img{height:150px}.gx-banner-controls:focus-within{padding:6px 8px!important}.gx-banner-assurance .gx-assurance-grid{grid-template-columns:1fr;gap:14px}}
+/* Products lead immediately after the banners; secondary copy follows the catalog. */
+#produtos.gx-catalog-first{padding:24px 0 34px;scroll-margin-top:88px}#produtos.gx-catalog-first .section-head{margin-bottom:14px;gap:12px;align-items:center}#produtos.gx-catalog-first .section-head h2{font-size:27px}#produtos.gx-catalog-first .section-head .catalog-kicker,#produtos.gx-catalog-first .section-head>p{display:none}#produtos.gx-catalog-first .cat-pills{margin-bottom:10px}#produtos.gx-catalog-first .catalog-status{margin:8px 0 12px;font-size:11px}#produtos.gx-catalog-first .category-heading{margin-bottom:14px;padding-bottom:12px}#produtos.gx-catalog-first .category-heading h3{font-size:23px}.gx-catalog-filters{margin:0 0 9px}.gx-catalog-filters summary{cursor:pointer;color:#ffc18f;font-size:12px;padding:9px 0;min-height:38px;box-sizing:border-box}.gx-catalog-filters summary:focus-visible{outline:2px solid #ff852b;outline-offset:3px}.gx-catalog-filters[open] summary{margin-bottom:8px}.gx-catalog-filters .catalog-tools{margin-bottom:12px}#produtos.gx-catalog-first+.gx-banner-assurance{margin-top:0;margin-bottom:22px}
+@media(max-width:560px){#produtos.gx-catalog-first{padding-top:17px;padding-bottom:20px}#produtos.gx-catalog-first .section-head{margin-bottom:10px}#produtos.gx-catalog-first .section-head h2{font-size:23px}#produtos.gx-catalog-first .category-heading{margin-bottom:11px;padding-bottom:10px}#produtos.gx-catalog-first .category-heading h3{font-size:21px}#produtos.gx-catalog-first .catalog-status{margin:3px 0 10px}.gx-catalog-filters summary{min-height:40px;padding:11px 0}}
+/* Keep the first Robux row within the initial storefront view. */
+.gx-banner-slide img{height:clamp(150px,25vw,320px)}
+#produtos.gx-catalog-first{padding-top:12px}
+#produtos.gx-catalog-first .section-head{display:none}
+#produtos.gx-catalog-first .cat-pills{margin-bottom:3px}
+#produtos.gx-catalog-first .gx-catalog-filters{margin-bottom:0}
+#produtos.gx-catalog-first .gx-catalog-filters summary{min-height:34px;padding:7px 0}
+#produtos.gx-catalog-first .catalog-status{margin:1px 0 5px;font-size:10px}
+#produtos.gx-catalog-first .category-heading{margin-top:0;margin-bottom:9px;padding-bottom:7px;gap:10px}
+#produtos.gx-catalog-first .category-index{padding:5px;font-size:11px}
+#produtos.gx-catalog-first .category-heading h3{font-size:20px;margin:0}
+#produtos.gx-catalog-first .category-heading p{font-size:10px;margin:2px 0 0}
+@media(max-width:560px){.gx-banner-slide img{height:150px}#produtos.gx-catalog-first{padding-top:10px}#produtos.gx-catalog-first .category-heading{margin-top:0;margin-bottom:8px;padding-bottom:6px}#produtos.gx-catalog-first .category-heading h3{font-size:19px}#produtos.gx-catalog-first .catalog-status{margin:0 0 4px}}
+#produtos.gx-catalog-first .category-group{animation:none!important;opacity:1!important;transform:none!important}
+#produtos.gx-catalog-first .category-heading p{display:none}
+#produtos.gx-catalog-first .catalog-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%)}
+.gx-catalog-toolbar{display:flex;align-items:flex-start;gap:15px;margin-bottom:12px;position:relative}
+#produtos.gx-catalog-first .gx-catalog-toolbar .cat-pills{flex:1;min-width:0;margin:0}
+#produtos.gx-catalog-first .gx-catalog-toolbar .gx-catalog-filters{flex:0 0 185px;margin:0}
+#produtos.gx-catalog-first .gx-catalog-toolbar summary{min-height:54px;display:flex;align-items:center;gap:7px;padding:10px 0}
+#produtos.gx-catalog-first .gx-catalog-toolbar summary::before{content:'+';font-size:18px}
+#produtos.gx-catalog-first .gx-catalog-toolbar details[open] summary::before{content:'−'}
+.gx-catalog-toolbar .catalog-tools{position:absolute;right:0;top:60px;z-index:9;width:min(540px,100%);padding:16px;background:#17110c;border:1px solid #754528;border-radius:8px;box-shadow:0 12px 30px #0009}
+@media(max-width:700px){.gx-catalog-toolbar{display:block;margin-bottom:5px}#produtos.gx-catalog-first .gx-catalog-toolbar summary{min-height:34px;padding:5px 0}.gx-catalog-toolbar .catalog-tools{position:static;width:100%;box-sizing:border-box}#produtos.gx-catalog-first .category-heading{min-height:30px}}
