@@ -66,6 +66,18 @@
   footer?.insertAdjacentHTML('beforebegin','<section class="gx-assurance" aria-label="Informações da loja"><div class="wrap gx-assurance-grid"><div>'+icon('pix')+'<span><strong>Pagamento via PIX</strong><small>QR Code e Copia e Cola</small></span></div><div>'+icon('shield')+'<span><strong>Sua senha é só sua</strong><small>Não pedimos a senha da conta</small></span></div><div>'+icon('chat')+'<span><strong>Fale com a GameX</strong><small>Atendimento por e-mail e Discord</small></span></div></div></section>');
   const topBanner=document.querySelector('.gx-banner-carousel');
   const assurances=document.querySelector('.gx-assurance');
-  if(topBanner&&assurances){assurances.classList.add('gx-banner-assurance');topBanner.after(assurances);}
+  const catalog=document.querySelector('#produtos');
+  if(topBanner&&catalog){
+    catalog.classList.add('gx-catalog-first');topBanner.after(catalog);
+    if(assurances){assurances.classList.add('gx-banner-assurance');catalog.after(assurances);}
+    const tools=catalog.querySelector('.catalog-tools');
+    if(tools){
+      const filters=document.createElement('details');filters.className='gx-catalog-filters';
+      const summary=document.createElement('summary');summary.textContent='Buscar e ordenar pacotes';
+      filters.append(summary);tools.before(filters);filters.append(tools);
+      const tabs=catalog.querySelector('.cat-pills');
+      if(tabs){const toolbar=document.createElement('div');toolbar.className='gx-catalog-toolbar';tabs.before(toolbar);toolbar.append(tabs,filters);}
+    }
+  }
   document.body.insertAdjacentHTML('beforeend','<nav class="gx-contact-dock" aria-label="Canais de atendimento"><a href="'+discord+'" target="_blank" rel="noopener noreferrer" aria-label="Entrar no Discord da GameX">'+icon('discord')+'<span>Discord</span></a><a href="mailto:suporte@agamexbrasil.com" aria-label="Falar com o suporte por e-mail">'+icon('chat')+'<span>Suporte</span></a></nav>');
 })();
