@@ -1,7 +1,18 @@
 (() => {
   'use strict';
   const discord='https://discord.com/invite/gamexbrasil';
-  const icon=(name)=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">'+({chat:'<path d="M4 4h16v12H9l-5 4V4Z"/>',discord:'<path d="m8 5-3 1-3 12 5 2 1-3m8-12 3 1 3 12-5 2-1-3M8 6h8M7 16c3 2 7 2 10 0"/><circle cx="8.5" cy="12" r="1"/><circle cx="15.5" cy="12" r="1"/>',shield:'<path d="m12 2 8 4v6c0 5-8 10-8 10S4 17 4 12V6l8-4Z"/><path d="m8 12 3 3 5-6"/>',pix:'<path d="m12 2 10 10-10 10L2 12 12 2Zm-6 6 6 6 6-6M6 16l6-6 6 6"/>'}[name])+'</svg>';
+  const trustSymbols=[
+    '<path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/>',
+    '<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>',
+    '<path d="M4 21V5l10-3v19M14 9h6v12M2 21h20M8 7h2M8 11h2M8 15h2M17 13h1M17 17h1M8 21v-3h2v3"/>',
+    '<path d="M4 13v-2a8 8 0 0 1 16 0v2M20 17v1a3 3 0 0 1-3 3h-4"/><rect x="2" y="11" width="4" height="7" rx="2"/><rect x="18" y="11" width="4" height="7" rx="2"/>'
+  ];
+  document.querySelectorAll('section.trust .trust-item .ic').forEach((holder,index)=>{
+    if(!trustSymbols[index])return;
+    holder.setAttribute('aria-hidden','true');
+    holder.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+trustSymbols[index]+'</svg>';
+  });
+  const icon=(name)=>'<svg stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">'+({chat:'<path d="M7 18 3 21V6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H7Z"/><path d="M7 8h10M7 12h7"/>',discord:'<path fill="currentColor" stroke="none" fill-rule="evenodd" d="M19.73 4.55a19.5 19.5 0 0 0-4.89-1.52l-.61 1.25a18.1 18.1 0 0 0-4.46 0l-.62-1.25a19.8 19.8 0 0 0-4.9 1.52C1.16 9.12.32 13.59.74 18a19.9 19.9 0 0 0 6 3.01l1.23-2a12 12 0 0 1-1.93-.93l.47-.37a14.3 14.3 0 0 0 11 0l.47.37c-.62.36-1.27.67-1.94.93l1.23 2a19.8 19.8 0 0 0 6-3.01c.51-5.11-.87-9.54-3.54-13.45ZM8.35 15.27c-1.08 0-1.97-.99-1.97-2.2s.87-2.2 1.97-2.2 1.99.99 1.97 2.2c0 1.21-.87 2.2-1.97 2.2Zm7.3 0c-1.08 0-1.97-.99-1.97-2.2s.87-2.2 1.97-2.2 1.99.99 1.97 2.2c0 1.21-.87 2.2-1.97 2.2Z"/>',shield:'<path d="m12 2 8 4v6c0 5-8 10-8 10S4 17 4 12V6l8-4Z"/><path d="m8 12 3 3 5-6"/>',pix:'<path d="m12 2 10 10-10 10L2 12 12 2Zm-6 6 6 6 6-6M6 16l6-6 6 6"/>'}[name])+'</svg>';
   const hero=document.querySelector('.hero-art');
   if(hero){
     hero.closest('.hero-grid').classList.add('gx-campaign-grid');
@@ -30,6 +41,8 @@
     if(/^(1200|1700) Robux$/.test(card.querySelector('h3')?.textContent.trim()||'')){
       card.classList.add('gx-special-product');
       card.insertAdjacentHTML('afterbegin','<span class="gx-offer-ribbon"><span aria-hidden="true">✦</span> OFERTA ESPECIAL</span>');
+      const cover=card.querySelector('.cover'),ribbon=card.querySelector('.gx-offer-ribbon');
+      if(cover){const positionRibbon=()=>{if(cover.clientHeight)ribbon.style.top=(cover.offsetTop+cover.clientHeight-30)+'px';};new ResizeObserver(positionRibbon).observe(cover);positionRibbon();}
     }
   });
   const reviews=[
@@ -69,6 +82,8 @@
   const catalog=document.querySelector('#produtos');
   if(topBanner&&catalog){
     catalog.classList.add('gx-catalog-first');topBanner.after(catalog);
+    const trust=document.querySelector('section.trust');
+    if(trust)topBanner.after(trust);
     if(assurances){assurances.classList.add('gx-banner-assurance');catalog.after(assurances);}
     const tools=catalog.querySelector('.catalog-tools');
     if(tools){
