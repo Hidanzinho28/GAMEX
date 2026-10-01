@@ -1,5 +1,8 @@
 (() => {
   'use strict';
+  const categorySymbols={robux:'<path d="M7 2 22 7 17 22 2 17Z"/><path d="m10 8 6 2-2 6-6-2 2-6Z"/>','v-bucks':'<circle cx="12" cy="12" r="9"/><path d="m8 8 4 8 4-8"/>',diamantes:'<path d="m3 8 4-5h10l4 5-9 13L3 8Zm0 0h18M7 3l5 18 5-18"/>','valorant-points':'<path d="m3 4 10 13H8L3 11V4Zm18 0v7l-5 6h-3L21 4Z" fill="currentColor" stroke="none"/>'};
+  const categoryIcon=id=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true">'+categorySymbols[id]+'</svg>';
+  const actionIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>';
   const categories = [
     {id:'robux',name:'Robux',game:'Roblox',match:'robux'},
     {id:'v-bucks',name:'V-Bucks',game:'Fortnite',match:'v-bucks'},
@@ -10,7 +13,7 @@
   nav?.querySelector('.logo-mark')?.closest('a')?.remove();
   if(nav && !nav.querySelector('.brand')) nav.insertAdjacentHTML('afterbegin','<a class="gx-brand" href="gamex-brasil.html" aria-label="GameX Brasil, início">GAME<b>X</b></a>');
   const brand = nav?.querySelector('.gx-brand, .brand');
-  if(brand){brand.classList.add('gx-gif-brand');brand.innerHTML='<img src="assets/gamex-logo.gif" width="64" height="64" alt="GameX Brasil">';}
+  if(brand){brand.classList.add('gx-gif-brand');brand.innerHTML='<img src="assets/gamex-logo.gif" width="64" height="64" alt="GameX Brasil"><span class="gx-header-wordmark" aria-hidden="true">Game<b>X</b></span>';}
   document.querySelectorAll('.hero-art img, footer img[alt*="GameX"]').forEach(img=>{img.src='assets/gamex-x.svg';img.alt='X — GameX Brasil';});
   document.querySelectorAll('.video-frame').forEach(frame=>{
     frame.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/HNIRNPcdG8M" title="Vídeo de orientação GameX" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
@@ -45,8 +48,8 @@
     const groups=categories.map((cat,index)=>{
       const items=cards.filter(card=>(card.getAttribute('href')||'').includes(cat.match));
       const section=document.createElement('section');section.className='category-group gx-entry';section.setAttribute('aria-labelledby','category-'+cat.id);
-      section.innerHTML='<div class="category-heading"><span class="category-index">0'+(index+1)+'</span><div><h3 id="category-'+cat.id+'">'+cat.name+'</h3><p>'+cat.game+' · escolha seu pacote</p></div><span class="category-count"></span></div><div class="products"></div>';
-      items.forEach(card=>{card.querySelector('img')?.setAttribute('loading','lazy');card.insertAdjacentHTML('beforeend','<div class="card-action">Ver pacote <span aria-hidden="true">↗</span></div>');section.querySelector('.products').append(card);});
+      section.innerHTML='<div class="category-heading"><span class="category-index" aria-hidden="true">'+categoryIcon(cat.id)+'</span><div><h3 id="category-'+cat.id+'">'+cat.name+'</h3><p>'+cat.game+' · escolha seu pacote</p></div><span class="category-count"></span></div><div class="products"></div>';
+      items.forEach(card=>{card.querySelector('img')?.setAttribute('loading','lazy');card.insertAdjacentHTML('beforeend','<div class="card-action">Ver pacote '+actionIcon+'</div>');section.querySelector('.products').append(card);});
       host.append(section);return {cat,items,section};
     });
     const tools=document.createElement('div');tools.className='catalog-tools';tools.innerHTML='<label for="catalog-search">Buscar um pacote<input type="search" id="catalog-search" placeholder="Ex.: 1200 Robux ou Fortnite" autocomplete="off"></label><label for="catalog-sort">Ordenar por<select id="catalog-sort"><option value="default">Destaques</option><option value="price-up">Menor preço</option><option value="price-down">Maior preço</option></select></label>';
@@ -87,3 +90,34 @@
   }
 })();
 
+
+/* Product motion: one delegated pointer handler, no idle animation loop. */
+(() => {
+  const catalog=document.querySelector('#produtos');
+  if(!catalog)return;
+  const cards=[...catalog.querySelectorAll('.card')];
+  cards.forEach(card=>{
+    card.classList.add('gx-product-depth');
+    const price=card.querySelector('.now');
+    if(price){const value=price.textContent.trim().replace(/^R\$\s*/,'');price.textContent='';const currency=document.createElement('span');currency.className='gx-currency';currency.textContent='R$ ';price.append(currency,document.createTextNode(value));}
+  });
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(hover: hover) and (pointer: fine)');
+  let active=null,frame=0,point=null;
+  function reset(){
+    cancelAnimationFrame(frame);frame=0;point=null;
+    if(active){active.classList.remove('gx-tilting','gx-touch-press');['--gx-rx','--gx-ry','--gx-light-x','--gx-light-y'].forEach(name=>active.style.removeProperty(name));active=null;}
+  }
+  function render(){frame=0;if(!active||!point)return;const r=active.getBoundingClientRect(),x=Math.max(0,Math.min(1,(point.x-r.left)/r.width)),y=Math.max(0,Math.min(1,(point.y-r.top)/r.height));active.style.setProperty('--gx-rx',((.5-y)*10).toFixed(2)+'deg');active.style.setProperty('--gx-ry',((x-.5)*10).toFixed(2)+'deg');active.style.setProperty('--gx-light-x',(x*100).toFixed(1)+'%');active.style.setProperty('--gx-light-y',(y*100).toFixed(1)+'%');}
+  catalog.addEventListener('pointermove',event=>{
+    if(reduced.matches||!fine.matches||event.pointerType!=='mouse')return;
+    const card=event.target.closest('.gx-product-depth');if(!card){reset();return;}
+    if(active!==card){reset();active=card;card.classList.add('gx-tilting');}
+    point={x:event.clientX,y:event.clientY};if(!frame)frame=requestAnimationFrame(render);
+  });
+  catalog.addEventListener('pointerout',event=>{if(active&&!active.contains(event.relatedTarget))reset();});
+  catalog.addEventListener('pointerdown',event=>{if(reduced.matches||event.pointerType==='mouse')return;const card=event.target.closest('.gx-product-depth');if(card){reset();active=card;card.classList.add('gx-touch-press');}});
+  ['pointerup','pointercancel','pointerleave','focusout'].forEach(type=>catalog.addEventListener(type,reset));
+  window.addEventListener('blur',reset);window.addEventListener('scroll',reset,{passive:true});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
+  reduced.addEventListener('change',reset);fine.addEventListener('change',reset);
+})();
